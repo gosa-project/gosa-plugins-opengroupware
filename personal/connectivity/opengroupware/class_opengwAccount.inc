@@ -127,6 +127,9 @@ class opengwAccount extends plugin
     function execute()
     {
         plugin::execute();
+
+        $theme = getThemeName();
+
         /* Log view */
         if($this->is_account && !$this->view_logged){
             $this->view_logged = TRUE;
@@ -212,11 +215,37 @@ class opengwAccount extends plugin
                         if($this->acl_is_readable("Teams")){
                             foreach($this->handle->validTeams as $id){
                                 if(in_array_strict($id['company_id'],$this->info['TeamIDis'])){
-                                    $str .= "<input ".$dis." type='checkbox' value='".$id['company_id']."' 
-                                        checked name='team_".base64_encode($id['description'])."'>".$id['description']."<br>";
+                                    switch ($theme) {
+                                        case 'classic':
+                                            $str .= "<input ".$dis." type='checkbox' value='".$id['company_id']."' 
+                                                    checked name='team_".base64_encode($id['description'])."'>".$id['description']."<br>";
+                                            break;
+                                        
+                                        default:
+                                            $str .= "<label>
+                                                        <input ".$dis." type='checkbox' value='".$id['company_id']."' 
+                                                            checked name='team_".base64_encode($id['description'])."'>
+                                                        <span>".$id['description']."</span>
+                                                    </label>";
+                                            break;
+                                    }
+                                    
                                 }else{
-                                    $str .= "<input ".$dis." type='checkbox' value='".$id['company_id']."' 
-                                        name='team_".base64_encode($id['description'])."'>".$id['description']."<br>";
+                                    switch ($theme) {
+                                        case 'classic':
+                                            $str .= "<input ".$dis." type='checkbox' value='".$id['company_id']."' 
+                                                    name='team_".base64_encode($id['description'])."'>".$id['description']."<br>";
+                                            break;
+                                        
+                                        default:
+                                            $str .= "<label>
+                                                        <input ".$dis." type='checkbox' value='".$id['company_id']."' 
+                                                            name='team_".base64_encode($id['description'])."'>
+                                                        <span>".$id['description']."</span>
+                                                    </label>";
+                                            break;
+                                    }
+                                    
                                 }
                             }
                         }
